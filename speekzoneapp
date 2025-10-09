@@ -1,0 +1,49 @@
+workflows:
+  ios_app_store:
+    name: Speekzone iOS – App Store
+    max_build_duration: 60
+
+    environment:
+      ios_signing:
+        distribution_type: app_store
+      vars:
+        # Update if your scheme is different (e.g., "Speekzone")
+        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_SCHEME: "App"
+
+    scripts:
+      - name: Unpack tarball if present
+        script: |
+          if [ -f "speekzone-complete-app.tar.gz" ]; then
+            tar -xzf speekzone-complete-app.tar.gz
+          fi
+
+      - name: Install Node deps & build web
+        script: |
+          npm ci
+          npm run build
+
+      - name: Capacitor iOS add/sync
+        script: |
+          if [ ! -d "ios" ]; then npx cap add ios; fi
+          npx cap sync ios
+
+      - name: CocoaPods install (safety)
+        script: |
+          cd ios/App
+          pod install
+          cd ../../
+
+      - name: Archive with Xcode
+        script: |
+          xcode-project use-profiles
+          xcodebuild -workspace "$XCODE_WORKSPACE" -scheme "$XCODE_SCHEME" -configuration Release -archivePath $CM_BUILD_DIR/Build/App.xcarchive archive CODE_SIGN_STYLE=Automatic
+
+      - name: Export IPA
+        script: |
+          xcode-project build-ipa --archive-path $CM_BUILD_DIR/Build/App.xcarchive
+
+    publishing:
+      app_store_connect:
+        auth: api_key
+        # You’ll add the API key in Codemagic UI; no secrets in YAML.
