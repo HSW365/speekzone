@@ -60,6 +60,6 @@ workflows:
 
     publishing:
       app_store_connect:
-        auth: api_key           # Uses the App Store Connect key you added in Codemagic
+        integration: "codemagic"
         submit_to_testflight: true
 
