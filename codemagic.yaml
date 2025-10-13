@@ -3,9 +3,6 @@ workflows:
     name: Speekzone iOS – App Store
     max_build_duration: 60
     instance_type: mac_mini_m1
-    
-    integrations:
-      app_store_connect: codemagic
 
     environment:
       ios_signing:
@@ -27,7 +24,7 @@ workflows:
 
       - name: Install Node dependencies
         script: |
-          npm ci
+          npm ci || npm install
 
       - name: Build web application
         script: |
@@ -43,7 +40,9 @@ workflows:
       - name: Install CocoaPods dependencies
         script: |
           cd ios/App
+          pod repo update
           pod install
+          cd ../../
 
       - name: Set up code signing
         script: |
@@ -61,5 +60,5 @@ workflows:
 
     publishing:
       app_store_connect:
-        auth: integration
+        auth: api_key           # Uses the App Store Connect key you added in Codemagic
         submit_to_testflight: true
