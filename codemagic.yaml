@@ -11,7 +11,6 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.speekzone.app
-        provisioning_profile: speekzone_ios_distribution_2025
       vars:
         XCODE_WORKSPACE: "ios/App/App.xcworkspace"
         XCODE_SCHEME: "App"
@@ -20,13 +19,13 @@ workflows:
       cocoapods: default
 
     scripts:
-      - name: Install Node dependencies (if present)
+      - name: Install Node dependencies
         script: |
           if [ -f package.json ]; then
             npm ci || npm install
           fi
 
-      - name: Build web assets (Capacitor projects)
+      - name: Build web assets
         script: |
           if [ -f package.json ]; then
             npm run build || true
@@ -57,5 +56,5 @@ workflows:
 
     publishing:
       app_store_connect:
-        integration: "codemagic"
+        auth: integration
         submit_to_testflight: true
