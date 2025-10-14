@@ -18,26 +18,23 @@ workflows:
     scripts:
       - name: Install Node dependencies
         script: |
-          if [ -f package.json ]; then
-            npm ci || npm install
-          fi
+          npm ci || npm install
 
       - name: Build web assets
         script: |
-          if [ -f package.json ]; then
-            npm run build || true
-          fi
+          npm run build
 
-      - name: Sync Capacitor iOS
+      - name: Add Capacitor iOS platform
         script: |
-          if command -v npx >/dev/null 2>&1; then
-            npx cap sync ios || true
-          fi
+          npx cap add ios
 
-      - name: Install CocoaPods
+      - name: Sync Capacitor to iOS
+        script: |
+          npx cap sync ios
+
+      - name: Install CocoaPods dependencies
         script: |
           cd ios/App
-          pod repo update
           pod install
           cd ../../
 
