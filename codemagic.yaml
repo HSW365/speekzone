@@ -50,7 +50,3 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - ~/Library/Logs/gym/*.log
-
-    publishing:
-      app_store_connect:
-        submit_to_testflight: true
