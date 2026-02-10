@@ -1,9 +1,10 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.hsw365.speekzone',   // 🔥 MUST MATCH APP STORE
-  appName: 'SpeekZone',            // Proper casing for App Store
-  webDir: 'dist',                  // IMPORTANT: see note below
+  appId: 'com.hsw365.speekzone.app',
+  appName: 'SpeekZone',
+  webDir: 'dist',
+  bundledWebRuntime: false,
 
   server: {
     androidScheme: 'https'
@@ -18,35 +19,39 @@ const config: CapacitorConfig = {
       splashImmersive: true,
       iosLaunchAnimationType: 'fade'
     },
+
     StatusBar: {
       style: 'light',
       backgroundColor: '#2563eb'
     },
+
     Keyboard: {
       resize: 'ionic',
       style: 'light',
       resizeOnFullScreen: true
     },
-    LocalNotifications: {
-      smallIcon: 'ic_stat_icon_config_sample',
-      iconColor: '#2563eb'
-    },
+
     Camera: {
       iosImageQuality: 85,
       androidImageQuality: 85
     },
-    Haptics: {}
+
+    Haptics: {},
+
+    LocalNotifications: {
+      smallIcon: 'ic_stat_icon_config_sample',
+      iconColor: '#2563eb'
+    }
   },
 
   ios: {
+    scheme: 'speekzone',
     contentInset: 'automatic',
     scrollEnabled: true,
     backgroundColor: '#2563eb',
     allowsLinkPreview: false,
-    handleApplicationNotifications: true,
-    scheme: 'speekzone'
+    handleApplicationNotifications: true
   }
 };
 
 export default config;
-
